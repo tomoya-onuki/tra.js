@@ -62,3 +62,14 @@ a:hover{
 ul {
     margin-left: -20px;
 }
+
+
+th,td {
+    border: solid 1px;              /* 枠線指定 */
+    padding: 10px;
+}
+ 
+table {
+    margin: 10px 0 0 0;
+    border-collapse:  collapse;     /* セルの線を重ねる */
+}

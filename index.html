@@ -21,6 +21,7 @@
                 <li><a href="#qs-cvs">Canvas</a></li>
                 <li><a href="#qs-d3js">D3.js</a></li>
             </ul>
+            <li><a href="#data">Data</a></li>
             <li><a href="#trajs">Trajs</a></li>
             <ul>
                 <li><a href="#trajs-ex">Example</a></li>
@@ -41,7 +42,8 @@
         <h1>Tra.js - Reference</h1>
         <div>
             Tra.js is a library for visualizing the trajectory of time-series location data in a web browser. Dynamic
-            changes can be visualized using transition. Currently supports visualization using the Canvas element and D3.js.
+            changes can be visualized using transition. Currently supports visualization using the Canvas element and
+            D3.js.
         </div>
 
         <div>
@@ -144,6 +146,58 @@
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+        </div>
+
+
+        <div>
+            <h2 id="data">Data</h2>
+            <div>
+                Describes data structures that can be visualized with Tra.js.
+            </div>
+            <div>
+                Data is an array of timestamps and 2D coordinate pairs.
+                Generally, the format of time-series position data is a string for time (e.g. YYYY-MM-DD HH:mm:ss) and latitude and longitude for coordinates. 
+            </div>
+            <div>
+                However, Tra.js handles time in milliseconds and coordinates in pixels.
+                Tra.js does not support these conversions. For example, to convert string time to milliseconds, use Day.js.
+            </div>
+
+            <h4>Structure</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date(millis)</th>
+                        <th>x(px)</th>
+                        <th>y(px)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0</td>
+                        <td>10</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>1000</td>
+                        <td>100</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Format</h4>
+            Data format is JSON.
+            <pre><code>var data = [{
+    date: 0, x: 10, y:10
+}, {
+    date: 1000, x: 100, y:50
+}];</code></pre>
         </div>
 
         <div>
