@@ -8,7 +8,7 @@
     <title>tra.js - test</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v6.js"></script>
-    <script src="./tra.js"></script>
+    <script src="../tra.min.js"></script>
     <script src="./main.js"></script>
 </head>
 
@@ -16,6 +16,11 @@
     <div id="contentslist">
         <ul>
             <li><a href="#qs">Quick Start</a></li>
+            <ul>
+                <li><a href="#qs-installation">Installation</a></li>
+                <li><a href="#qs-cvs">Canvas</a></li>
+                <li><a href="#qs-d3js">D3.js</a></li>
+            </ul>
             <li><a href="#trajs">Trajs</a></li>
             <ul>
                 <li><a href="#trajs-ex">Example</a></li>
@@ -28,7 +33,7 @@
             </ul>
         </ul>
 
-        <div></div>
+        <div><a href="https://github.com/tomoya-onuki/tra.js" target="_blank">GitHub</a></div>
         <div style="font-size: 60%;">&copy; 2022 Tomoya Onuki.</div>
     </div>
 
@@ -41,8 +46,104 @@
 
         <div>
             <h2 id="qs">Quick Srtart</h2>
-            <h4>CDN</h4>
-            <h4>CDN</h4>
+            <h3 id="qs-installation">Installation</h3>
+            <ul>
+                <li>
+                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.js">tra.js (21KB)</a>
+                </li>
+                <li>
+                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.min.js">tra.min.js (7KB)</a>
+                </li>
+            </ul>
+
+            <h3 id="qs-cvs">Canvas</h3>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;script src=&quot;tra.min.js&quot;&gt;&lt;/script&gt;
+    &lt;title&gt;Tra.js - canvas demo&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;canvas width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;/canvas&gt;
+
+    &lt;script&gt;
+        let data = []
+        for (let t = 0, msec = 1000; t &lt; Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
+            data.push({
+                date: msec,
+                x: Math.cos(t) * 90 + 100,
+                y: Math.sin(t) * 90 + 100
+            })
+        }
+
+        const cvs = document.querySelector('canvas');
+        new Trajs()
+            .fetch(data)
+            .weight(5)
+            .thinning(0.99)
+            .length(1000)
+            .damping(0.95)
+            .color(3, 152, 252)
+            .ticks(100)
+            .label('canvas')
+            .labelStyle({
+                font: 'Arial', size: 10, color: '#000', offset: 5
+            })
+            .transition(cvs, 2, 1000, 4000, true);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <h3 id="qs-d3js">D3.js</h3>
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;script src=&quot;https://d3js.org/d3.v6.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;tra.min.js&quot;&gt;&lt;/script&gt;
+    &lt;title&gt;Tra.js - d3 demo&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div id=&quot;d3-view&quot;&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+        let data = []
+        for (let t = 0, msec = 1000; t &lt; Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
+            data.push({
+                date: msec,
+                x: Math.cos(t) * 90 + 100,
+                y: Math.sin(t) * 90 + 100
+            })
+        }
+        const svg = d3.select(&quot;#d3-view&quot;)
+            .append(&quot;svg&quot;)
+            .attr(&quot;width&quot;, 200)
+            .attr(&quot;height&quot;, 200);
+
+        new TrajsD3()
+            .fetch(data)
+            .weight(5)
+            .thinning(0.99)
+            .length(1000)
+            .damping(0.95)
+            .color(3, 152, 252)
+            .ticks(100)
+            .label('D3.js')
+            .labelStyle({
+                font: 'Arial', size: 10, color: '#000', offset: 5
+            })
+            .roundCap(true)
+            .transition(svg, 2, 1000, 4000, true);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
         </div>
 
         <div>
