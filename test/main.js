@@ -25,7 +25,7 @@ window.onload = () => {
         .damping(0.95)
         .color(3, 152, 252)
         .ticks(100)
-        .transition(cvs1, 2, 1000, 4000, true);
+        .transition(cvs1, 2, 2, 1000, 4000, true);
 
 
     let data2 = []
@@ -49,7 +49,7 @@ window.onload = () => {
         .labelStyle({
             font: 'Arial', size: 10, color: '#FFF', offset: 5
         })
-        .transition(cvs2, 5, 1000, 3400, true);
+        .transition(cvs2, 5, 5, 1000, 3400, true);
 
     document.querySelector('#start')
         .addEventListener('click', function () {
@@ -113,5 +113,5 @@ window.onload = () => {
             font: 'Arial', size: 10, color: '#FFF', offset: 5
         })
         .roundCap(true)
-        .transition(svg1, 2, 1000, 4000, true);
+        .transition(svg1, 2, 2, 1000, 4000, true);
 }

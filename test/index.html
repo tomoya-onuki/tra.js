@@ -8,7 +8,7 @@
     <title>tra.js - test</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://d3js.org/d3.v6.js"></script>
-    <script src="../tra.min.js"></script>
+    <script src="../tra.js"></script>
     <script src="./main.js"></script>
 </head>
 
@@ -281,7 +281,7 @@ setInterval(function () {
                 <h4>.draw(canvas: HTMLCanvasElement, date: number)</h4>
                 <div>Draw static trajectory to given date. Format of date is milli second.</div>
 
-                <h4>.transition(canvas: HTMLCanvasElement, frameRate:number, startDate: number, endDate: number, loop:
+                <h4>.transition(canvas: HTMLCanvasElement, frameRate:number, step; number, startDate: number, endDate: number, loop:
                     boolean)</h4>
                 <div>Displays an animation of the trajectory from startDate to endDate. The animation repeats when loop
                     is true.</div>
@@ -381,7 +381,7 @@ new TrajsD3()
                 <h4>.draw(svg: SVGElement, date: number)</h4>
                 <div>Draw static trajectory to given date. Format of date is milli second.</div>
 
-                <h4>.transition(svg: SVGElement, frameRate:number, startDate: number, endDate: number, loop:
+                <h4>.transition(svg: SVGElement, frameRate:number, step: number, startDate: number, endDate: number, loop:
                     boolean)</h4>
                 <div>Displays an animation of the trajectory from startDate to endDate. The animation repeats when loop
                     is true.</div>

@@ -3,8 +3,16 @@
 # Tra.js
 Tra.js is a library for visualizing the trajectory of time-series location data in a web browser. Dynamic changes can be visualized using transition. Currently supports visualization using the Canvas element and D3.js.
 
-## Reference
+Tra.jsは時系列位置データをwebブラウザ上で可視化するためのライブラリです。動的な移動の様子を軌跡で表現します。現在はCanvas要素とD3.jsを用いた可視化をサポートしています。
+
+## Reference (English)
 https://tomoya-onuki.github.io/tra.js/
+
+## Data
+I use processed bus location data obtained from GTFS-JP(https://www.gtfs.jp/).
+
+GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工したものを利用しています。
+
 
 ## Quick Start
 ### Canvas

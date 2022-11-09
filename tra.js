@@ -18,6 +18,7 @@
             font: 'Arial', size: 10, color: '#000', offset: 0
         }
         _animationRun = true;
+        _crntDate = 0;
 
         constructor() {
             return this;
@@ -88,6 +89,8 @@
             if (this._data.length < 1 || crntDate < this._startDate) {
                 return;
             }
+
+            this._crntDate = crntDate;
 
             if (this._data.length > 0) {
                 const ctx = cvs.getContext('2d');
@@ -205,22 +208,28 @@
             return this;
         }
 
-        transition(cvs, frameRate, start, end, loop) {
+        now() {
+            // return crntDate;
+        }
+
+        transition(cvs, frameRate, step, start, end, loop) {
             const me = this;
             const ctx = cvs.getContext('2d');
             const w = cvs.width;
             const h = cvs.height;
             let crntDate = start;
 
-            setInterval(function () {
+            let animation = setInterval(function () {
                 ctx.clearRect(0, 0, w, h);
                 me.draw(cvs, crntDate);
+                // console.log(crntDate)
 
                 if (me._animationRun)
-                    crntDate += frameRate;
+                    crntDate += step;
 
-                if (loop && crntDate > end)
-                    crntDate = start
+                if (crntDate > end)
+                    if (loop) crntDate = start;
+                    else clearInterval(animation);
             }, frameRate);
             return this;
         }
@@ -344,7 +353,7 @@
             return this;
         }
 
-        transition(svg, frameRate, start, end, loop) {
+        transition(svg, frameRate, step, start, end, loop) {
             const me = this;
             let crntDate = start;
 
@@ -354,7 +363,7 @@
                 me.draw(svg, crntDate);
 
                 if (me._animationRun)
-                    crntDate += frameRate;
+                    crntDate += step;
 
                 if (loop && crntDate > end)
                     crntDate = start
