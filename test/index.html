@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tra.js - test</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="./tra.js"></script>
+    <script src="./main.js"></script>
+</head>
+
+<body>
+    <div id="contentslist">
+        <ul>
+            <li><a href="#qs">Quick Start</a></li>
+            <li><a href="#trajs">Trajs</a></li>
+            <ul>
+                <li><a href="#trajs-ex">Example</a></li>
+                <li><a href="#trajs-methods">Methods</a></li>
+            </ul>
+            <li><a href="#trajsd3">TrajsD3</a></li>
+            <ul>
+                <li><a href="#trajsd3-ex">Example</a></li>
+                <li><a href="#trajsd3-methods">Methods</a></li>
+            </ul>
+        </ul>
+
+        <div></div>
+        <div style="font-size: 60%;">&copy; 2022 Tomoya Onuki.</div>
+    </div>
+
+    <div id="main">
+        <h1>Tra.js - Reference</h1>
+        <div>
+            Tra.js is a library for visualizing the trajectory of time-series location data in a web browser. Dynamic
+            changes can be visualized using transition. Currently supports visualization using the Canvas element and D3.js.
+        </div>
+
+        <div>
+            <h2 id="qs">Quick Srtart</h2>
+            <h4>CDN</h4>
+            <h4>CDN</h4>
+        </div>
+
+        <div>
+            <h2 id="trajs">Trajs</h2>
+            <div>Trajs class provides visualization using canvas elements.</div>
+
+            <div>
+                <h3 id="trajs-ex">Example</h3>
+                <h4>Data</h4>
+                <pre><code>let data = []
+for (let t = 0, msec = 1000; t < Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
+    data.push({
+        date: msec,
+        x: Math.cos(t) * 90 + 100,
+        y: Math.sin(t) * 90 + 100
+    })
+}
+</code></pre>
+
+                <h4>Static</h4>
+                <canvas id="cvs0" width="200" height="200"></canvas>
+                <pre><code>const cvs = document.querySelector('canvas');
+new Trajs()
+    .fetch(data)
+    .weight(5)
+    .damping(0.99)
+    .color(255, 255, 255)
+    .draw(cvs, 3000);</code></pre>
+
+
+                <h4>Animation</h4>
+                <canvas id="cvs1" width="200" height="200"></canvas>
+                <pre><code>const cvs = document.querySelector('canvas');
+new Trajs()
+    .fetch(data)
+    .weight(5)
+    .thinning(0.99)
+    .length(1000)
+    .damping(0.95)
+    .color(3, 152, 252)
+    .ticks(100)
+    .roundCap(true)
+    .transition(cvs, 2, 1000, 4000, true);</code></pre>
+
+
+                <h4>Intaraction</h4>
+                <canvas id="cvs2" width="200" height="200"></canvas>
+                <button id="start">start</button>
+                <button id="pause">pause</button>
+                <pre><code>const cvs = document.querySelector('canvas');
+const trajs = new Trajs()
+    .fetch(data)
+    .weight(10)
+    .thinning(0.95)
+    .length(1000)
+    .damping(0.9)
+    .color(242, 169, 51)
+    .roundCap(true)
+    .label('text')
+    .labelStyle({
+        font: 'Arial', size: 10, color: '#FFF', offset: 5
+    })
+    .transition(cvs, 2, 1000, 4000, true);
+
+document.querySelector('#start').addEventListener('click', function () {
+    trajs.start();
+})
+document.querySelector('#pause').addEventListener('click', function () {
+    trajs.pause();
+})</code></pre>
+
+
+                <h4>Animation (not use transition method.)</h4>
+                <canvas id="cvs3" width="200" height="200"></canvas>
+                <pre><code>const cvs = document.querySelector('canvas');
+const trajs = new Trajs()
+    .fetch(data)
+    .weight(2)
+    .color(237, 9, 59);
+
+let start = 1000;
+let end = 3000;
+let crntDate = start;
+setInterval(function () {
+    ctx.clearRect(0, 0, 200, 200);
+    trajs.draw(cvs, crntDate);
+    crntDate++;
+
+    if (crntDate > end)
+    crntDate = start;
+}, 1);</code></pre>
+
+            </div>
+
+
+            <div>
+                <h3 id="trajs-methods">Methods</h3>
+                <h4>.fetch(data: {date: number, x: number, y: number}[])</h4>
+                <div>Load the data.</div>
+
+                <h4>.weight(w: number)</h4>
+                <div>Change a trajectory weight. Default is 1.</div>
+
+                <h4>.thinnign(t: number)</h4>
+                <div>Thin a trajectory width. Default is 1.</div>
+
+                <h4>.roundCap(r: boolean)</h4>
+                <div>Change a trajectory cap style.</div>
+
+                <h4>.color(r: number, g: number, b:number)</h4>
+                <div>Change a trajectory color. Format is RGB. Range is [0, 255]. Default is rgb(0,0,0).</div>
+
+                <h4>.opacity(o: number)</h4>
+                <div>Change a trajectory opacity. Range is [0.0, 1.0]. Default is 1.0.</div>
+
+                <h4>.damping(d: number)</h4>
+                <div>Damp a trajectory oapcity. Range is [0.0, 1.0]. Default is 1.0.</div>
+
+                <h4>.length(l: number)</h4>
+                <div>Change a trajectory length. Format is milli second. Default is the difference between the maximum
+                    and
+                    minimum values of date in data.</div>
+
+                <h4>.ticks(t: number)</h4>
+                <div>Displays tikcs. Format is milli seconds. Range is t > 0. When t &le; 0, ticks is not displayed.
+                    Default is 0.</div>
+
+                <h4>.label(l: string)</h4>
+                <div>Displays text on head of trajectory.</div>
+
+                <h4>.labelStyle({font: string, size: number, color: string, offset: number})</h4>
+                <div>Change params for display text. Default is {font: "Arial", size: 10, color: '#000000', offset: 0 }
+                </div>
+
+                <h4>.draw(canvas: HTMLCanvasElement, date: number)</h4>
+                <div>Draw static trajectory to given date. Format of date is milli second.</div>
+
+                <h4>.transition(canvas: HTMLCanvasElement, frameRate:number, startDate: number, endDate: number, loop:
+                    boolean)</h4>
+                <div>Displays an animation of the trajectory from startDate to endDate. The animation repeats when loop
+                    is true.</div>
+
+                <h4>.start()</h4>
+                <div>Start an animation of trajectory.</div>
+
+                <h4>.pause()</h4>
+                <div>Stop an animation of trajectory.</div>
+            </div>
+        </div>
+
+
+
+        <div>
+            <h2 id="trajsd3">TrajsD3</h2>
+            <div>Trajs class provides visualization using D3.js</div>
+
+            <div>
+                <h3 id="trajsd3-ex">Example</h3>
+                <h4>Static</h4>
+                <div id="d3-view0"></div>
+                <pre><code>const svg = d3.select("#d3-view")
+    .append("svg")
+    .attr("width", 200)
+    .attr("height", 200);
+
+new TrajsD3()
+    .fetch(data)
+    .weight(5)
+    .damping(0.99)
+    .color(255, 255, 255)
+    .draw(svg, 3000);</code></pre>
+
+                <h4>Animation</h4>
+                <div id="d3-view1"></div>
+                <pre><code>const svg = d3.select("#d3-view")
+    .append("svg")
+    .attr("width", 200)
+    .attr("height", 200);
+
+new TrajsD3()
+    .fetch(data)
+    .weight(5)
+    .thinning(0.99)
+    .length(1000)
+    .damping(0.95)
+    .color(3, 152, 252)
+    .ticks(100)
+    .label('D3.js')
+    .labelStyle({
+        font: 'Arial', size: 10, color: '#FFF', offset: 5
+    })
+    .roundCap(true)
+    .transition(svg, 2, 1000, 4000, true);</code></pre>
+            </div>
+
+            <div>
+                <h3 id="trajsd3-methods">Methods</h3>
+                <h4>.fetch(data: {date: number, x: number, y: number}[])</h4>
+                <div>Load the data.</div>
+
+                <h4>.weight(w: number)</h4>
+                <div>Change a trajectory weight. Default is 1.</div>
+
+                <h4>.thinnign(t: number)</h4>
+                <div>Thin a trajectory width. Default is 1.</div>
+
+                <h4>.roundCap(r: boolean)</h4>
+                <div>Change a trajectory cap style.</div>
+
+                <h4>.color(r: number, g: number, b:number)</h4>
+                <div>Change a trajectory color. Format is RGB. Range is [0, 255]. Default is rgb(0,0,0).</div>
+
+                <h4>.opacity(o: number)</h4>
+                <div>Change a trajectory opacity. Range is [0.0, 1.0]. Default is 1.0.</div>
+
+                <h4>.damping(d: number)</h4>
+                <div>Damp a trajectory oapcity. Range is [0.0, 1.0]. Default is 1.0.</div>
+
+                <h4>.length(l: number)</h4>
+                <div>Change a trajectory length. Format is milli second. Default is the difference between the maximum
+                    and
+                    minimum values of date in data.</div>
+
+                <h4>.ticks(t: number)</h4>
+                <div>Displays tikcs. Format is milli seconds. Range is t > 0. When t &le; 0, ticks is not displayed.
+                    Default is 0.</div>
+
+                <h4>.label(l: string)</h4>
+                <div>Displays text on head of trajectory.</div>
+
+                <h4>.labelStyle({font: string, size: number, color: string, offset: number})</h4>
+                <div>Change params for display text. Default is {font: "Arial", size: 10, color: '#000000', offset: 0 }
+                </div>
+
+                <h4>.draw(svg: SVGElement, date: number)</h4>
+                <div>Draw static trajectory to given date. Format of date is milli second.</div>
+
+                <h4>.transition(svg: SVGElement, frameRate:number, startDate: number, endDate: number, loop:
+                    boolean)</h4>
+                <div>Displays an animation of the trajectory from startDate to endDate. The animation repeats when loop
+                    is true.</div>
+
+                <h4>.start()</h4>
+                <div>Start an animation of trajectory.</div>
+
+                <h4>.pause()</h4>
+                <div>Stop an animation of trajectory.</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
