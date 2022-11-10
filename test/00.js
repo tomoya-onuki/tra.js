@@ -6,7 +6,6 @@ for (let t = 0, msec = 1000; t < Math.PI / 2 * 3; t += Math.PI / 120, msec += 10
         lat: -(Math.sin(t) * 90 + 100)
     })
 }
-console.log('static demo');
 
 const cvs0 = document.querySelector('#cvs0');
 Trajs()

@@ -31,6 +31,7 @@
 
         #prj = new Projection();
         #mapList = [];
+        // #mapColor = '#000';
 
         constructor() {
             return this
@@ -160,9 +161,12 @@
                         this.#ctx.lineWidth = weight;
                         this.#ctx.lineCap = this.#roundCap ? 'round' : 'butt';
 
-                        let color = this.#ctx.createLinearGradient(headx, heady, tailx, taily);
-                        color.addColorStop(0.0, c0);
-                        color.addColorStop(1.0, c1);
+                        let color = c0;
+                        if (!headx && !heady && !tailx && !taily) {
+                            color = this.#ctx.createLinearGradient(headx, heady, tailx, taily);
+                            color.addColorStop(0.0, c0);
+                            color.addColorStop(1.0, c1);
+                        }
                         this.#ctx.strokeStyle = color;
                         this.#ctx.stroke();
                     }
@@ -438,9 +442,11 @@
                 map.stroke = stroke;
                 map.fill = fill
                 this.#mapList.push(map)
-                map.draw(this.#ctx, this.#prj)
             }
             return this;
+        }
+        drawMap() {
+            this.#mapList.forEach(map => map.draw(this.#ctx, this.#prj))
         }
 
     }
