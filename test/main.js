@@ -3,21 +3,22 @@ window.onload = () => {
     for (let t = 0, msec = 1000; t < Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
         data.push({
             date: msec,
-            x: Math.cos(t) * 90 + 100,
-            y: Math.sin(t) * 90 + 100
+            lon: Math.cos(t) * 90 + 100,
+            lat: Math.sin(t) * 90 + 100
         })
     }
 
     const cvs0 = document.querySelector('#cvs0');
-    new Trajs()
+    Trajs()
         .fetch(data)
         .weight(5)
         .damping(0.99)
         .color(255, 255, 255)
-        .draw(cvs0, 3000);
+        .canvas(cvs0)
+        .draw(3000);
 
     const cvs1 = document.querySelector('#cvs1');
-    new Trajs()
+    Trajs()
         .fetch(data)
         .weight(5)
         .thinning(0.99)
@@ -25,19 +26,20 @@ window.onload = () => {
         .damping(0.95)
         .color(3, 152, 252)
         .ticks(100)
-        .transition(cvs1, 2, 2, 1000, 4000, true);
+        .canvas(cvs1)
+        .animation(2, 2, 1000, 4000, true);
 
 
     let data2 = []
     for (let t = 0, msec = 1000; t < Math.PI * 2; t += Math.PI / 120, msec += 10) {
         data2.push({
             date: msec,
-            x: Math.cos(t) * 90 + 100,
-            y: Math.sin(t) * 90 + 100
+            lon: Math.cos(t) * 90 + 100,
+            lat: Math.sin(t) * 90 + 100
         })
     }
     const cvs2 = document.querySelector('#cvs2');
-    const trajs2 = new Trajs()
+    const trajs2 = Trajs()
         .fetch(data)
         .weight(10)
         .thinning(0.95)
@@ -49,7 +51,8 @@ window.onload = () => {
         .labelStyle({
             font: 'Arial', size: 10, color: '#FFF', offset: 5
         })
-        .transition(cvs2, 5, 5, 1000, 3400, true);
+        .canvas(cvs2)
+        .animation(5, 5, 1000, 3400, true);
 
     document.querySelector('#start')
         .addEventListener('click', function () {
@@ -62,10 +65,11 @@ window.onload = () => {
 
 
     const cvs3 = document.querySelector('#cvs3');
-    const trajs3 = new Trajs()
+    const trajs3 = Trajs()
         .fetch(data)
         .weight(2)
-        .color(237, 9, 59);
+        .color(237, 9, 59)
+        .canvas(cvs3);
 
     const ctx = cvs3.getContext('2d');
     let start = 1000;
@@ -73,7 +77,7 @@ window.onload = () => {
     let crntDate = start;
     setInterval(function () {
         ctx.clearRect(0, 0, 200, 200);
-        trajs3.draw(cvs3, crntDate)
+        trajs3.draw(crntDate)
         crntDate++
 
         if (crntDate > end)
@@ -88,19 +92,20 @@ window.onload = () => {
         .attr("width", 200)
         .attr("height", 200);
 
-    new TrajsD3()
+    Trajs()
         .fetch(data)
         .weight(5)
         .damping(0.99)
         .color(255, 255, 255)
-        .draw(svg0, 3000);
+        .svg(svg0)
+        .draw(3000);
 
     const svg1 = d3.select("#d3-view1")
         .append("svg")
         .attr("width", 200)
         .attr("height", 200);
 
-    new TrajsD3()
+    Trajs()
         .fetch(data)
         .weight(5)
         .thinning(0.99)
@@ -113,5 +118,6 @@ window.onload = () => {
             font: 'Arial', size: 10, color: '#FFF', offset: 5
         })
         .roundCap(true)
-        .transition(svg1, 2, 2, 1000, 4000, true);
+        .svg(svg1)
+        .animation(2, 2, 1000, 4000, true);
 }

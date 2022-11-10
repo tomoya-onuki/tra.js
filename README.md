@@ -54,7 +54,7 @@ GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工した
             .labelStyle({
                 font: 'Arial', size: 10, color: '#000', offset: 5
             })
-            .transition(cvs, 2, 1000, 4000, true);
+            .animation(cvs, 2, 1000, 4000, true);
     </script>
 </body>
 
@@ -105,7 +105,7 @@ GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工した
                 font: 'Arial', size: 10, color: '#000', offset: 5
             })
             .roundCap(true)
-            .transition(svg, 2, 1000, 4000, true);
+            .animation(svg, 2, 1000, 4000, true);
     </script>
 </body>
 

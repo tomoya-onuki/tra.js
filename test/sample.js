@@ -2,20 +2,13 @@ window.onload = () => {
 
     const width = 400;
     const height = 400;
+    // const transform = Trajs().transform
+    //     .center(139.63, 35.60)
+    //     .scale(200000)
+    //     .mercator();
 
-    const lon2x = (lon) => {
-        // let x = lon * (Math.PI / 180);
-        // let cx = 139.63 * (Math.PI / 180);
-        // return (x - cx) * 200000;
-        return (lon - 139.65) * 5000;
-    }
-    const lat2y = (lat) => {
-        // let y = Math.log(Math.tan(Math.PI / 4 + lat * (Math.PI / 180) / 2));
-        // let cy = Math.log(Math.tan(Math.PI / 4 + 35.60 * (Math.PI / 180) / 2));
-        // return (y - cy) * 200000;
-        return (lat - 35.65) * 5000;
-    }
-
+    // console.log(transform.x(139.63), transform.y(35.60))
+    // console.log(Trajs().map.transform(transform).get(139.63, 35.60))
 
     d3.csv("../data/my/stops.csv", function (data) {
         return data;
@@ -32,42 +25,52 @@ window.onload = () => {
 
             let data = timeData.map(d => {
                 let pos = posData[d.stop_id];
-                let y = lat2y(pos.lat);
-                let x = lon2x(pos.lon);
+                let x = pos.lon;
+                let y = pos.lat;
+                // let x = transform.x(pos.lon)
+                // let y = transform.y(pos.lat)
 
                 let msec = dayjs(`2022-01-01 ${d.date}`).valueOf()
-                return { date: msec, x: x, y: y }
+                return { date: msec, lon: x, lat: y }
             })
 
             let start = data[0].date;
             let end = data[data.length - 1].date;
 
+            const transformParam = {
+                center : {lon : 139.63, lat : 35.60},
+                scale : 100000,
+                projection : 'mercator'
+            };
 
             const svg = d3.select("#d3-view")
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height);
 
-            // Map and projection
-            const projection = d3.geoNaturalEarth1()
-                .scale(20000)
-                .translate([width / 2, height / 2])
+            Trajs()
+                .fetch(data)
+                .weight(3)
+                .damping(0.95)
+                .thinning(0.99)
+                .color(3, 152, 252)
+                .transform(transformParam)
+                .svg(svg)
+                .animation(100, 10000, start, end + 60 * 60 * 1000, true);
 
-            // Load external data and boot
-            d3.json("../data/my/map.geojson").then(function (map) {
 
-
-
-                new TrajsD3()
-                    .fetch(data)
-                    .weight(5)
-                    .damping(0.98)
-                    .thinning(0.99)
-                    .color(3, 152, 252)
-                    .roundCap(true)
-                    .transition(svg, 100, 10000, start, end + 60 * 60 * 1000, true);
-            })
-
+            const cvs = document.querySelector('canvas');
+            cvs.width = width;
+            cvs.height = height;
+            Trajs()
+                .fetch(data)
+                .weight(3)
+                .damping(0.95)
+                .thinning(0.99)
+                .color(3, 152, 252)
+                .transform(transformParam)
+                .canvas(cvs)
+                .animation(100, 10000, start, end + 60 * 60 * 1000, true);
         })
     });
 
