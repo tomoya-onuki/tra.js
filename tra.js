@@ -7,7 +7,6 @@
 
     class Trajectory {
         #data = [];
-        #dataClone = [];
         #startDate = 0;
         #endDate = 0;
         #weight = 1;
@@ -31,6 +30,7 @@
         #svgmode = false;
 
         #prj = new Projection();
+        #mapList = [];
 
         constructor() {
             return this
@@ -38,7 +38,6 @@
 
         fetch(data) {
             this.#data = data;
-            this.#dataClone = data;
             this.#lenMillis = data[data.length - 1].date - data[0].date
             this.#startDate = data[0].date
             this.#endDate = data[data.length - 1].date
@@ -117,7 +116,6 @@
             if (this.#data.length < 1 || crntDate < this.#startDate) {
                 return;
             }
-
 
             if (this.#data.length > 0) {
                 let idx = findIdx(0, this.#data.length - 1, crntDate, this.#data) - 1;
@@ -374,6 +372,7 @@
                     this.#drawSegment(idx - 1, opacity, weight, trajLenMillis - segLenMillis, tickDate, crntDate)
                 }
             }
+            return this;
         }
 
 
@@ -386,7 +385,6 @@
             this.#animationRun = false;
             return this;
         }
-
 
         animation(frameRate, step, start, end, loop) {
             const me = this;
@@ -403,6 +401,7 @@
                     me.#svg.selectAll('text').remove()
                 }
 
+                me.#mapList.forEach(map => map.draw(me.#ctx, me.#prj))
                 me.draw(crntDate);
 
                 if (me.#animationRun)
@@ -420,6 +419,27 @@
             this.#prj.scale(obj.scale);
             this.#prj.center(obj.center.lon, obj.center.lat);
             this.#prj.mode(obj.projection);
+            if (this.#cvsmode && !this.#svgmode) {
+                this.#prj.h = this.#cvs.height;
+                this.#prj.w = this.#cvs.width;
+            }
+            else if (!this.#cvsmode && this.#svgmode) {
+                this.#prj.h = this.#svg.attr('height');
+                this.#prj.w = this.#svg.attr('width');
+            }
+            return this;
+        }
+
+        map(topojson, color, fill, stroke) {
+            if (this.#cvsmode && !this.#svgmode) {
+                const map = new Map();
+                map.topojson(topojson);
+                map.color = color;
+                map.stroke = stroke;
+                map.fill = fill
+                this.#mapList.push(map)
+                map.draw(this.#ctx, this.#prj)
+            }
             return this;
         }
 
@@ -454,38 +474,42 @@
         #cLon = 0;
         #scale = 1;
         #mode = 'liner';
+        h = 0;
+        w = 0;
 
         constructor() {
 
         }
 
         x(lon) {
+            // lon *= -1;
             if (this.#mode === 'liner') {
-                return (lon - this.#cLon) * this.#scale;
+                return (lon - this.#cLon) * this.#scale + this.w / 2;
             }
             else if (this.#mode === 'mercator') {
                 let x = lon * (Math.PI / 180);
                 let cx = this.#cLon * (Math.PI / 180);
-                return (x - cx) * this.#scale;
+                return (x - cx) * this.#scale + this.w / 2;
             }
 
             return 0;
         }
         y(lat) {
+            lat *= -1;
             if (this.#mode === 'liner') {
-                return (lat - this.#cLat) * this.#scale;
+                return (lat - this.#cLat) * this.#scale + this.h / 2;
             }
             else if (this.#mode === 'mercator') {
                 let y = Math.log(Math.tan(Math.PI / 4 + lat * (Math.PI / 180) / 2));
                 let cy = Math.log(Math.tan(Math.PI / 4 + this.#cLat * (Math.PI / 180) / 2));
-                return (y - cy) * this.#scale;
+                return (y - cy) * this.#scale + this.h / 2;
             }
             return 0;
         }
 
         center(lon, lat) {
             this.#cLon = lon;
-            this.#cLat = lat;
+            this.#cLat = -lat;
         }
 
         scale(s) {
@@ -501,17 +525,13 @@
         }
     }
 
-    class Vertex {
-        lon;
-        lat;
-        constructor(x, y) {
-            this.lon = x;
-            this.lat = y;
-        }
-    }
 
     class Map {
-        #transform = new Transform();
+        color = '#000';
+        fill = false;
+        stroke = true;
+
+        topoGeometrysList = [];
 
         constructor() {
         }
@@ -520,17 +540,11 @@
             const topoJsonData = JSON.parse(jsonString);
 
             // topojsonのデータを緯度経度の絶対座標に変換する
-            this.topoGeometryList = topoJsonData.objects.map.geometries;
-            this.topoArcList = this.decodeArcs(topoJsonData, topoJsonData.arcs);
-        }
-
-        transform(t) {
-            this.#transform = t;
-            return this;
-        }
-
-        get(lon, lat) {
-            return [this.#transform.x(lon), this.#transform.y(lat)]
+            Object.keys(topoJsonData.objects).forEach(key => {
+                this.topoGeometrysList.push(topoJsonData.objects[key].geometries);
+            })
+            // topoGeometryList = topoJsonData.objects[key].geometries;
+            this.topoArcList = this.#decodeArcs(topoJsonData, topoJsonData.arcs);
         }
 
         #decodeArc(topology, arc) {
@@ -541,24 +555,91 @@
                 if (topology.transform != undefined) {
                     const lon = x * topology.transform.scale[0] + topology.transform.translate[0];
                     const lat = y * topology.transform.scale[1] + topology.transform.translate[1];
-                    return new Vertex(lon, lat);
+                    return { lon: lon, lat: lat };
                 } else {
                     const lon = x
                     const lat = y
-                    return new Vertex(lon, lat);
+                    return { lon: lon, lat: lat };
                 }
 
             });
         }
 
         #decodeArcs(topology, arcs) {
-            return arcs.map((arc) => this.decodeArc(topology, arc));
+            return arcs.map((arc) => this.#decodeArc(topology, arc));
         }
 
-        draw() {
+        draw(ctx, prj) {
+            ctx.fillStyle = this.color;
+            ctx.strokeStyle = this.color;
+            ctx.lineWidth = 1.0;
 
+            this.topoGeometrysList.forEach(g => {
+                this.#drawMap(g, ctx, prj)
+            })
         }
 
+        #drawMap(topoGeometryList, ctx, prj) {
+            if (topoGeometryList.length > 0) {
+
+                // topoJsonで区切られた地域ごとに面を作る
+                topoGeometryList.forEach((geo) => {
+                    if (geo.type === 'Polygon') {
+                        const arcs = geo.arcs;
+                        arcs.forEach((arcIdxList) => {
+                            this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                        });
+                    }
+                    else if (geo.type === 'MultiPolygon') {
+                        const arcs = geo.arcs;
+                        arcs.forEach(arc => {
+                            arc.forEach((arcIdxList) => {
+                                this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                            })
+                        })
+
+                    }
+                    else if (geo.type === 'LineString') {
+                        const arcIdxList = geo.arcs;
+                        this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                    }
+                });
+            }
+        }
+
+        #drawGeometry(ctx, prj, arcIdxList, arcList) {
+            let firstPoint = true;
+            ctx.beginPath();
+            arcIdxList.forEach((arcIndex) => {
+                if (arcIndex >= 0) {
+                    const arc = arcList[arcIndex];
+                    for (let i = 0; i < arc.length; i++) {
+                        const x = prj.x(arc[i].lon, this.centerLon)
+                        const y = prj.y(arc[i].lat, this.centerLat)
+                        if (firstPoint) {
+                            ctx.moveTo(x, y);
+                            firstPoint = false;
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                } else {
+                    const arc = arcList[~arcIndex];
+                    for (let i = arc.length - 1; i >= 0; i--) {
+                        const x = prj.x(arc[i].lon, this.centerLon)
+                        const y = prj.y(arc[i].lat, this.centerLat)
+                        if (firstPoint) {
+                            ctx.moveTo(x, y);
+                            firstPoint = false;
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                }
+            })
+            if (this.stroke) ctx.stroke();
+            if (this.fill) ctx.fill();
+        }
     }
 
 
