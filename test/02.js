@@ -9,7 +9,7 @@ for (let t = 0, msec = 1000; t < Math.PI * 2; t += Math.PI / 120, msec += 10) {
 }
 const cvs2 = document.querySelector('#cvs2');
 const trajs2 = Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(10)
     .thinning(0.95)
     .length(1000)

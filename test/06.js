@@ -4,7 +4,7 @@ const svg1 = d3.select("#d3-view1")
     .attr("height", 200);
 
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .thinning(0.99)
     .length(1000)

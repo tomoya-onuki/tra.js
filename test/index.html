@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="../tra.js"></script>
-    
+
 </head>
 
 <body>
@@ -40,29 +40,51 @@
         <h1>Tra.js - Reference</h1>
         <div>
             Tra.js is a library for visualizing the trajectory of time-series location data in a web browser. Dynamic
-            changes can be visualized using transition. Currently supports visualization using the Canvas element and
+            changes can be visualized using transition. Currently supports visualization using Canvas element and
             D3.js.
         </div>
 
         <div>
-            <canvas id="cvs" width="600" height="400"></canvas>
+            <canvas id="cvs" width="400" height="400"></canvas>
             <script src="./sample.js"></script>
+
+            <div id="bus-ui">
+                <div>
+                    <label for="bus-speed">Speed</label>
+                    <input id="bus-speed" type="range" min="1" max="10" value="6" step="1">
+                </div>
+                <div>
+                    <label for="bus-weight">Weight</label>
+                    <input id="bus-weight" type="range" min="1" max="5" value="3" step="1">
+                </div>
+                <div>
+                    <label for="bus-damp">Damping</label>
+                    <input id="bus-damp" type="range" min="0.1" max="1.0" value="0.8" step="0.1">
+                </div>
+                <div>
+                    <label for="bus-thin">Thinning</label>
+                    <input id="bus-thin" type="range" min="0.1" max="1.0" value="0.8" step="0.1">
+                </div>
+            </div>
+
             <div>
-                Visualized bus trajectory in tokyo, shibuya.
-                I use processed bus location data obtained from Shibuya City Open Data.
-                (<a href="https://www.city.shibuya.tokyo.jp/kusei/tokei/opendata/index1.html" style="color: #aaa;">https://www.city.shibuya.tokyo.jp/kusei/tokei/opendata/index1.html</a>)
+                Visualized bus trajectories in tokyo, shibuya.
+                I use processed location data of Shibuya hachiko bus obtained from Shibuya City Open Data.
+                <a href="https://www.city.shibuya.tokyo.jp/kusei/tokei/opendata/index1.html" target="_blank"
+                    style="color: #aaa;">(https://www.city.shibuya.tokyo.jp/kusei/tokei/opendata/index1.html)</a>
             </div>
         </div>
 
         <div>
-            <h2 id="qs">Quick Srtart</h2>
+            <h2 id="qs">Quick Start</h2>
             <h3 id="qs-installation">Installation</h3>
             <ul>
                 <li>
-                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.js">tra.js (21KB)</a>
+                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.js" target="_blank">tra.js (21KB)</a>
                 </li>
                 <li>
-                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.min.js">tra.min.js (7KB)</a>
+                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.min.js" target="_blank">tra.min.js
+                        (7KB)</a>
                 </li>
             </ul>
 
@@ -92,7 +114,7 @@
 
         const cvs = document.querySelector('canvas');
         Trajs()
-            .fetch(data)
+            .trajectory(data)
             .weight(5)
             .thinning(0.99)
             .length(1000)
@@ -139,7 +161,7 @@
             .attr(&quot;height&quot;, 200);
 
         Trajs()
-            .fetch(data)
+            .trajectory(data)
             .weight(5)
             .thinning(0.99)
             .length(1000)
@@ -207,16 +229,16 @@
             <h4>Format</h4>
             <div>Data format is JSON.</div>
             <pre><code>[{
-    date: 0, x: 10, y:10
+    date: 0, lon: 10, lat:10
 }, {
-    date: 1000, x: 100, y:50
+    date: 1000, lon: 100, lat:50
 }]</code></pre>
         </div>
 
         <div>
             <h2 id="methods">Methods</h2>
-            <h4>.fetch(data: {date: number, x: number, y: number}[])</h4>
-            <div>Load the data.</div>
+            <h4>.trajectory(data: {date: number, lon: number, lat: number}[])</h4>
+            <div>Load a timse-series location data.</div>
 
             <h4>.transform({ center : {lon : number, lat : number}, scale : number, projection : string })</h4>
             <div>Transform cordinate from (lon, lat) into (x, y). A projection is 'liner' or 'mercator'. Default is
@@ -254,7 +276,7 @@
             <div>Displays text on head of trajectory.</div>
 
             <h4>.labelStyle({ font: string, size: number, color: string, offset: number })</h4>
-            <div>Change params for display text. Default is {font: "Arial", size: 10, color: '#000000', offset: 0 }
+            <div>Change params for display text. Default is {font: "Arial", size: 10, color: '#000000', offset: 0 }.
             </div>
 
             <h4>.canvas(cvs: HTMLCanvasElement)</h4>
@@ -278,8 +300,11 @@
             <div>Stop an animation of trajectory.</div>
 
 
-            <h4>.map(topojson: JSON, color: string, fill: boolean, stroke: boolean)</h4>
-            <div>This property can display map in canvas element.</div>
+            <h4>.map(topojson: JSON)</h4>
+            <div>Load a map data(.topojson).</div>
+
+            <h4>.mapStyle({ color: string, fill: boolean, stroke: boolean })</h4>
+            <div>Set params about map style. Default is {color:'#000', fill: false, stroke: true}.</div>
         </div>
 
 
@@ -303,7 +328,7 @@ for (let t = 0, msec = 1000; t < Math.PI / 2 * 3; t += Math.PI / 120, msec += 10
                 <script src="./00.js"></script>
                 <pre><code>const cvs = document.querySelector('canvas');
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .damping(0.99)
     .color(255, 255, 255)
@@ -316,7 +341,7 @@ Trajs()
                 <script src="./01.js"></script>
                 <pre><code>const cvs = document.querySelector('canvas');
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .thinning(0.99)
     .length(1000)
@@ -334,7 +359,7 @@ Trajs()
                 <script src="./02.js"></script>
                 <pre><code>const cvs = document.querySelector('canvas');
 const trajs = Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(10)
     .thinning(0.95)
     .length(1000)
@@ -363,7 +388,7 @@ document.querySelector('#pause').addEventListener('click', function () {
 const ctx = cvs.getContext('2d');
 
 const trajs = Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(2)
     .color(237, 9, 59)
     .canvas(cvs)
@@ -386,16 +411,14 @@ setInterval(function () {
                 <pre><code>fetch("JPN.topojson")
     .then(response => response.text())
     .then(topojson => {
-        const transformParam = {
-            center: { lon: 137.7, lat: 37.5 },
-            scale: 500,
-            projection: 'mercator'
-        };
-
         const cvs = document.querySelector('#cvs');
         Trajs()
             .canvas(cvs)
-            .transform(transformParam)
+            .transform({
+                center: { lon: 137.7, lat: 37.5 },
+                scale: 500,
+                projection: 'mercator'
+            })
             .map(topojson, "#fff", false, true)
             .draw(0);
 })</code></pre>
@@ -412,7 +435,7 @@ setInterval(function () {
 .attr("height", 200);
 
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .damping(0.99)
     .color(255, 255, 255)
@@ -428,7 +451,7 @@ Trajs()
 .attr("height", 200);
 
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .thinning(0.99)
     .length(1000)

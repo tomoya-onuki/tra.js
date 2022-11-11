@@ -10,6 +10,11 @@ fetch("../data/my/jpn.topojson")
         Trajs()
             .canvas(cvs4)
             .transform(transformParam)
-            .map(topojson, "#fff", false, true)
-            .draw(0);
+            .map(topojson)
+            .mapStyle({
+                color: "#fff",
+                fill: false,
+                stroke: true
+            })
+            .draw();
     })

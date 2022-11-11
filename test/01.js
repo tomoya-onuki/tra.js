@@ -1,6 +1,6 @@
 const cvs1 = document.querySelector('#cvs1');
 Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(5)
     .thinning(0.99)
     .length(1000)

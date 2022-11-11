@@ -34,7 +34,7 @@ window.onload = () => {
                     };
                     const cvs = document.querySelector('#cvs');
                     Trajs()
-                        .fetch(data)
+                        .trajectory(data)
                         .weight(3)
                         .damping(0.95)
                         .thinning(0.99)
@@ -58,7 +58,7 @@ window.onload = () => {
 
                             const cvs0 = document.querySelector('#cvs0');
                             Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(5)
                                 .damping(0.99)
                                 .color(255, 255, 255)
@@ -67,7 +67,7 @@ window.onload = () => {
 
                             const cvs1 = document.querySelector('#cvs1');
                             Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(5)
                                 .thinning(0.99)
                                 .length(1000)
@@ -88,7 +88,7 @@ window.onload = () => {
                             }
                             const cvs2 = document.querySelector('#cvs2');
                             const trajs2 = Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(10)
                                 .thinning(0.95)
                                 .length(1000)
@@ -114,7 +114,7 @@ window.onload = () => {
 
                             const cvs3 = document.querySelector('#cvs3');
                             const trajs3 = Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(2)
                                 .color(237, 9, 59)
                                 .canvas(cvs3);
@@ -154,7 +154,7 @@ window.onload = () => {
                                 .attr("height", 200);
 
                             Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(5)
                                 .damping(0.99)
                                 .color(255, 255, 255)
@@ -167,7 +167,7 @@ window.onload = () => {
                                 .attr("height", 200);
 
                             Trajs()
-                                .fetch(data)
+                                .trajectory(data)
                                 .weight(5)
                                 .thinning(0.99)
                                 .length(1000)

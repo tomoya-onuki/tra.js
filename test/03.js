@@ -1,6 +1,6 @@
 const cvs3 = document.querySelector('#cvs3');
 const trajs3 = Trajs()
-    .fetch(data)
+    .trajectory(data)
     .weight(2)
     .color(237, 9, 59)
     .canvas(cvs3);

@@ -31,13 +31,16 @@
 
         #prj = new Projection();
         #mapList = [];
+        #mapColor = '#000';
+        #mapFill = false;
+        #mapStroke = true;
         // #mapColor = '#000';
 
         constructor() {
             return this
         }
 
-        fetch(data) {
+        trajectory(data) {
             this.#data = data;
             this.#lenMillis = data[data.length - 1].date - data[0].date
             this.#startDate = data[0].date
@@ -113,7 +116,15 @@
         }
 
 
-        draw(crntDate) {
+        draw(...param) {
+            // console.log(crntDate.length)
+            this.#drawMap();
+            if (param.length === 1) {
+                const crntDate = param[0];
+                this.#drawTraj(crntDate);
+            }
+        }
+        #drawTraj(crntDate) {
             if (this.#data.length < 1 || crntDate < this.#startDate) {
                 return;
             }
@@ -405,8 +416,8 @@
                     me.#svg.selectAll('text').remove()
                 }
 
-                me.#mapList.forEach(map => map.draw(me.#ctx, me.#prj))
-                me.draw(crntDate);
+                me.#drawMap();
+                me.#drawTraj(crntDate);
 
                 if (me.#animationRun)
                     crntDate += step;
@@ -434,19 +445,26 @@
             return this;
         }
 
-        map(topojson, color, fill, stroke) {
+        map(topojson) {
             if (this.#cvsmode && !this.#svgmode) {
                 const map = new Map();
                 map.topojson(topojson);
-                map.color = color;
-                map.stroke = stroke;
-                map.fill = fill
                 this.#mapList.push(map)
             }
             return this;
         }
-        drawMap() {
-            this.#mapList.forEach(map => map.draw(this.#ctx, this.#prj))
+        mapStyle(obj) {
+            this.#mapList.forEach(m => {
+                if (obj.color) this.#mapColor = obj.color;
+                if (obj.stroke) this.#mapStroke = obj.stroke;
+                if (obj.fill) this.#mapFill = obj.fill;
+            })
+            return this;
+        }
+        #drawMap() {
+            if (this.#mapList.length > 0) {
+                this.#mapList.forEach(map => map.draw(this.#ctx, this.#prj, this.#mapColor, this.#mapFill, this.#mapStroke))
+            }
         }
 
     }
@@ -533,9 +551,6 @@
 
 
     class Map {
-        color = '#000';
-        fill = false;
-        stroke = true;
 
         topoGeometrysList = [];
 
@@ -575,17 +590,17 @@
             return arcs.map((arc) => this.#decodeArc(topology, arc));
         }
 
-        draw(ctx, prj) {
-            ctx.fillStyle = this.color;
-            ctx.strokeStyle = this.color;
+        draw(ctx, prj, color, fill, stroke) {
+            ctx.fillStyle = color;
+            ctx.strokeStyle = color;
             ctx.lineWidth = 1.0;
 
             this.topoGeometrysList.forEach(g => {
-                this.#drawMap(g, ctx, prj)
+                this.#drawMap(g, ctx, prj, fill, stroke)
             })
         }
 
-        #drawMap(topoGeometryList, ctx, prj) {
+        #drawMap(topoGeometryList, ctx, prj, fill, stroke) {
             if (topoGeometryList.length > 0) {
 
                 // topoJsonで区切られた地域ごとに面を作る
@@ -593,27 +608,27 @@
                     if (geo.type === 'Polygon') {
                         const arcs = geo.arcs;
                         arcs.forEach((arcIdxList) => {
-                            this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                            this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList, fill, stroke);
                         });
                     }
                     else if (geo.type === 'MultiPolygon') {
                         const arcs = geo.arcs;
                         arcs.forEach(arc => {
                             arc.forEach((arcIdxList) => {
-                                this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                                this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList, fill, stroke);
                             })
                         })
 
                     }
                     else if (geo.type === 'LineString') {
                         const arcIdxList = geo.arcs;
-                        this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList);
+                        this.#drawGeometry(ctx, prj, arcIdxList, this.topoArcList, fill, stroke);
                     }
                 });
             }
         }
 
-        #drawGeometry(ctx, prj, arcIdxList, arcList) {
+        #drawGeometry(ctx, prj, arcIdxList, arcList, fill, stroke) {
             let firstPoint = true;
             ctx.beginPath();
             arcIdxList.forEach((arcIndex) => {
@@ -643,8 +658,8 @@
                     }
                 }
             })
-            if (this.stroke) ctx.stroke();
-            if (this.fill) ctx.fill();
+            if (stroke) ctx.stroke();
+            if (fill) ctx.fill();
         }
     }
 

@@ -43,7 +43,7 @@ GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工した
 
         const cvs = document.querySelector('canvas');
         new Trajs()
-            .fetch(data)
+            .trajectory(data)
             .weight(5)
             .thinning(0.99)
             .length(1000)
@@ -93,7 +93,7 @@ GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工した
             .attr("height", 200);
 
         new TrajsD3()
-            .fetch(data)
+            .trajectory(data)
             .weight(5)
             .thinning(0.99)
             .length(1000)

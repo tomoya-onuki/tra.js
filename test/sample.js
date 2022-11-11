@@ -1,6 +1,4 @@
 window.onload = () => {
-
-
     d3.csv("../data/my/stops.csv", function (data) {
         return data;
     }).then(function (data) {
@@ -31,27 +29,15 @@ window.onload = () => {
                 });
             })
 
-            console.log(data)
+            // console.log(data)
 
-            // let data = timeData.map(d => {
-            //     let pos = posData[d.stop_id];
-            //     let x = pos.lon;
-            //     let y = pos.lat;
-
-            //     let msec = dayjs(`2022-01-01 ${d.date}`).valueOf()
-            //     return { date: msec, lon: x, lat: y }
-            // })
 
             fetch("../data/my/map.topojson")
                 .then(response => response.text())
                 .then(topojson => {
-                    // let start = dayjs('2022-01-01 07:50:00').valueOf();
-                    // let end = dayjs('2022-01-01 20:21:00').valueOf();
-                    // let start = data[0].date;
-                    // let end = data[data.length - 1].date;
 
                     const transformParam = {
-                        center: { lon: 139.7, lat: 35.67 },
+                        center: { lon: 139.69, lat: 35.665 },
                         scale: 300000 * devicePixelRatio,
                         projection: 'mercator'
                     };
@@ -66,7 +52,12 @@ window.onload = () => {
                     var map = Trajs()
                         .canvas(cvs)
                         .transform(transformParam)
-                        .map(topojson, "#fff", false, true);
+                        .map(topojson)
+                        .mapStyle({
+                            color: "#fff",
+                            fill: false,
+                            stroke: true
+                        });
 
                     let keyList = Object.keys(data);
                     let colorList = {};
@@ -77,18 +68,18 @@ window.onload = () => {
                     })
                     let trajsList = [];
                     keyList.forEach(key => {
-                        let label = key.split('_')[2]; 
+                        let label = key.split('_')[2];
                         let rgb = colorList[label];
                         let trajs = Trajs()
-                            .fetch(data[key])
-                            .weight(6)
+                            .trajectory(data[key])
+                            .weight(3 * devicePixelRatio)
                             .damping(0.8)
                             .thinning(0.8)
                             .color(rgb[0], rgb[1], rgb[2])
                             .label(label)
                             .labelStyle({
                                 font: 'Arial',
-                                size: 10,
+                                size: 6 * devicePixelRatio,
                                 color: '#FFF',
                                 offset: 5
                             })
@@ -104,20 +95,39 @@ window.onload = () => {
 
                     let crnt = start;
                     const ctx = cvs.getContext('2d');
+
+                    let speed = 6000;
+                    document.querySelector('#bus-speed').addEventListener('input', () => {
+                        speed = document.querySelector('#bus-speed').value * 1000;
+                    });
+                    document.querySelector('#bus-weight').addEventListener('input', () => {
+                        let w = document.querySelector('#bus-weight').value * devicePixelRatio;
+                        trajsList.forEach(t => t.weight(w));
+                    });
+                    document.querySelector('#bus-damp').addEventListener('input', () => {
+                        let d = document.querySelector('#bus-damp').value;
+                        trajsList.forEach(t => t.damping(d));
+                    });
+                    document.querySelector('#bus-thin').addEventListener('input', () => {
+                        let v = document.querySelector('#bus-thin').value;
+                        trajsList.forEach(t => t.thinning(v));
+                    });
+
                     setInterval(() => {
                         ctx.clearRect(0, 0, w, h);
-                        map.drawMap();
+                        map.draw();
 
-                        ctx.font = '24px Arial'
+                        ctx.font = `${12 * devicePixelRatio}px Arial`
                         ctx.fillStyle = '#FFF'
-                        ctx.fillText(dayjs(crnt).format('HH:mm:ss'), 100, 100);
+                        ctx.fillText(dayjs(crnt).format('HH:mm:ss'), 50, 50);
 
                         if (start <= crnt && crnt <= end) {
                             trajsList.forEach(t => t.draw(crnt));
                         } else if (crnt > end) {
                             crnt = start;
                         }
-                        crnt += 60 * 1000 / 10;
+
+                        crnt += speed;
                     }, 10);
                 })
         })
