@@ -1,13 +1,11 @@
 
-let data2 = []
-for (let t = 0, msec = 1000; t < Math.PI * 2; t += Math.PI / 120, msec += 10) {
-    data2.push({
-        date: msec,
-        lon: Math.cos(t) * 90 + 100,
-        lat: (Math.sin(t) * 90 + 100) * -1
-    })
-}
 const cvs2 = document.querySelector('#cvs2');
+w = cvs2.width * devicePixelRatio;
+h = cvs2.height * devicePixelRatio;
+cvs2.width = w;
+cvs2.height = h;
+cvs2.style.width = String(w / devicePixelRatio) + 'px';
+cvs2.style.height = String(h / devicePixelRatio) + 'px';
 const trajs2 = Trajs()
     .trajectory(data)
     .weight(10)
@@ -18,7 +16,7 @@ const trajs2 = Trajs()
     .roundCap(true)
     .label('text')
     .labelStyle({
-        font: 'Arial', size: 10, color: '#FFF', offset: 5
+        font: 'Arial', size: 10 * devicePixelRatio, color: '#FFF', offset: 5
     })
     .canvas(cvs2)
     .animation(5, 5, 1000, 3400, true);
