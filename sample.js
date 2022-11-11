@@ -1,5 +1,5 @@
 window.onload = () => {
-    d3.csv("../data/my/stops.csv", function (data) {
+    d3.csv("./res/stops.csv", function (data) {
         return data;
     }).then(function (data) {
         let posData = {}
@@ -7,7 +7,7 @@ window.onload = () => {
             posData[d.stop_id] = { lat: Number(d.lat), lon: Number(d.lon) }
         })
 
-        d3.csv("../data/my/stop_times2.csv", function (data) {
+        d3.csv("./res/stop_times2.csv", function (data) {
             return data;
 
         }).then(function (timeData) {
@@ -32,7 +32,7 @@ window.onload = () => {
             // console.log(data)
 
 
-            fetch("../data/my/map.topojson")
+            fetch("./res/map.topojson")
                 .then(response => response.text())
                 .then(topojson => {
 
