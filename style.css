@@ -1,5 +1,6 @@
 body {
     background: #222;
+    font-family: Helvetica, Arial, sans-serif;
 }
 #main {
     position: absolute;
@@ -8,7 +9,7 @@ body {
     transform: translate(-50%, 0);
     background: #222;
     color: #fff;
-    padding: 20px 0 50px 0;
+    margin: 20px 0 50px 0;
     width:600px
 }
 #contentslist {
@@ -32,13 +33,13 @@ h1{
 }
 h2{
     color: #222;
-    margin: 30px 0 5px 0;
+    margin: 50px 0 0px 0;
     padding: 0 0 0 10px;
     background: #eee;
 }
 h3 {
     color: #fff;
-    margin: 50px 0 0 0;
+    margin: 30px 0 0 0;
     padding: 0 0 5px 0;
     border: none;
     border-bottom: 1px #fff solid;
@@ -63,6 +64,23 @@ ul {
     margin-left: -20px;
 }
 
+#bus-ui {
+    float: right;
+    margin-top: 30px;
+}
+#bus-ui label {
+    display: inline-block;
+    width: 60px;
+    font-size: 80%;
+    padding: 0;
+    margin: 0;
+}
+#bus-ui input[type="range"] {
+    width: 120px;
+    padding: 0;
+    margin: 0;
+    transform: translate(0, 4px);
+}
 
 th,td {
     border: solid 1px;              /* 枠線指定 */
