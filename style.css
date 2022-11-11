@@ -8,14 +8,17 @@ body {
     #main {
         position: absolute;
         top: 0px;
-        left: 50%;
-        transform: translate(-50%, 0);
+        /* left: 50%; */
+        /* transform: translate(-50%, 0); */
         background: #222;
         color: #fff;
-        margin: 20px 0 50px 0;
+        /* margin: 20px 0 50px 0;
         max-width: 600px;
         width: 90%;
-        min-width: 400px;
+        min-width: 400px; */
+        
+        width: calc(100% - 40px);
+        left: 20px;
         z-index: 1;
     }
 
@@ -127,13 +130,14 @@ li {
 
 
 pre {
-    width: calc(100% - 40px);
+    /* width: calc(100% - 40px); */
     border: 1px solid #222;
     padding: 20px 20px 20px 20px;
     color: #fff;
     background: #444;
     border-radius: 10px;
     margin: 10px 0 50px 0;
+    white-space: pre-wrap;
 }
 
 h1 {
@@ -169,6 +173,7 @@ div {
 a {
     color: #fff;
     text-decoration: none;
+    word-break: break-all;
 }
 
 a:hover {

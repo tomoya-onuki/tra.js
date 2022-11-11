@@ -38,7 +38,7 @@ window.onload = () => {
 
                     const transformParam = {
                         center: { lon: 139.69, lat: 35.665 },
-                        scale: 300000 * devicePixelRatio,
+                        scale: 250000 * devicePixelRatio,
                         projection: 'mercator'
                     };
                     const cvs = document.querySelector('#cvs');
