@@ -63,6 +63,9 @@ a:hover{
 ul {
     margin-left: -20px;
 }
+li {
+    margin-bottom: 0.7em;
+}
 
 #bus-ui {
     float: right;
