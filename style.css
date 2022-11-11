@@ -84,6 +84,11 @@ body {
         opacity: 0.5;
     }
 
+    #bus-ui {
+        position: relative;
+        margin: 0 0 20px 0;
+    }
+
 }
 
 @media (min-width: 920px) {
@@ -106,6 +111,11 @@ body {
     }
     #contentslist-open-button {
         display: none;
+    }
+    #bus-ui {
+        position: absolute;
+        top: 300px;
+        right: 25px;
     }
 }
 
@@ -175,11 +185,7 @@ a:hover {
 
 
 
-#bus-ui {
-    position: absolute;
-    top: 300px;
-    right: 25px;
-}
+
 
 #bus-ui label {
     display: inline-block;
