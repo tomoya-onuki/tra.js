@@ -376,12 +376,14 @@ const trajs = Trajs()
     .canvas(cvs)
     .animation(2, 1000, 4000, true);
 
-document.querySelector('#start').addEventListener('click', function () {
-    trajs.start();
-})
-document.querySelector('#pause').addEventListener('click', function () {
-    trajs.pause();
-})</code></pre>
+document.querySelector('#start')
+    .addEventListener('click', function () {
+        trajs.start();
+    })
+document.querySelector('#pause')
+    .addEventListener('click', function () {
+        trajs.pause();
+    })</code></pre>
 
 
                 <h4>Animation (not use transition method.)</h4>
