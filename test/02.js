@@ -1,3 +1,5 @@
+import { Trajs } from "../tra.js";
+
 
 let data2 = []
 for (let t = 0, msec = 1000; t < Math.PI * 2; t += Math.PI / 120, msec += 10) {
@@ -9,7 +11,7 @@ for (let t = 0, msec = 1000; t < Math.PI * 2; t += Math.PI / 120, msec += 10) {
 }
 const cvs2 = document.querySelector('#cvs2');
 const trajs2 = Trajs()
-    .trajectory(data)
+    .trajectory(data2)
     .weight(10)
     .thinning(0.95)
     .length(1000)

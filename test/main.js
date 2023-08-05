@@ -1,3 +1,5 @@
+import { Trajs } from "../tra.js";
+
 window.onload = () => {
     d3.csv("../data/my/stops.csv", function (data) {
         return data;
