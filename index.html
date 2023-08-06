@@ -6,12 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tra.js</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Code+Pro&family=Zen+Kaku+Gothic+New:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="lib/onui.css">
+    <link rel="stylesheet" href="lib/prism.css">
+    <script src="lib/onui.js"></script>
+    <script src="lib/prism.js"></script>
     <script src="https://d3js.org/d3.v6.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
     <script src="tra.min.js"></script>
-
+    <script src="./src/codeBlockCopy.js"></script>
 </head>
 
 <body>
@@ -19,11 +28,10 @@
     <label id="contentslist-open-button" for="contentslist-open"></label>
     <div id="contentslist">
         <ul>
-            <li><a href="#qs">Quick Start</a></li>
+            <li><a href="#qs">Getting Started</a></li>
             <ul>
                 <li><a href="#qs-installation">Installation</a></li>
-                <li><a href="#qs-cvs">Canvas</a></li>
-                <li><a href="#qs-d3js">D3.js</a></li>
+                <li><a href="#usage">Usage</a></li>
             </ul>
             <li><a href="#data">Data</a></li>
             <li><a href="#methods">Methods</a></li>
@@ -48,7 +56,7 @@
 
         <div>
             <canvas id="cvs" width="300" height="300"></canvas>
-            <script src="./sample.js"></script>
+            <script src="./src/sample.js"></script>
 
             <div id="bus-ui">
                 <div>
@@ -78,25 +86,41 @@
         </div>
 
         <div>
-            <h2 id="qs">Quick Start</h2>
+            <h2 id="qs">Getting Started</h2>
             <h3 id="qs-installation">Installation</h3>
-            <ul>
-                <li>
-                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.js" target="_blank">tra.js (25KB)</a>
-                </li>
-                <li>
-                    <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.min.js" target="_blank">tra.min.js
-                        (8KB)</a>
-                </li>
-            </ul>
+            <div>
+                <div>Download this</div>
+                <ul>
+                    <li>
+                        <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.js" target="_blank">tra.js
+                            (25KB)</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/tomoya-onuki/tra.js/blob/main/tra.min.js" target="_blank">tra.min.js
+                            (8KB)</a>
+                    </li>
+                </ul>
+            </div>
+            <div>OR</div>
+            <pre><code class="language-shell">npm -i https://github.com/tomoya-onuki/tra.js</code></pre>
 
-            <h3 id="qs-cvs">Canvas</h3>
-            <pre><code>&lt;!DOCTYPE html&gt;
+            <h3 id="usage">Usage</h3>
+
+            <onui type="tab" style="width: 100%; margin: 20px 0px 0px 0px">
+                <option name="tab-canvas-js" value="Canvas (JS)"></option>
+                <option name="tab-d3-js" value="D3.js (JS)"></option>
+                <option name="tab-ts" value="TypeScript"></option>
+            </onui>
+
+            <div id="tab-canvas-js">
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot;
+          content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot;
+          content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
     &lt;script src=&quot;tra.min.js&quot;&gt;&lt;/script&gt;
     &lt;title&gt;Tra.js - canvas demo&lt;/title&gt;
 &lt;/head&gt;
@@ -105,13 +129,15 @@
     &lt;canvas width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;/canvas&gt;
 
     &lt;script&gt;
-        let data = []
-        for (let t = 0, msec = 1000; t &lt; Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
+        let data = [];
+        for (let t = 0, msec = 1000; 
+             t &lt; Math.PI / 2 * 3; 
+             t += Math.PI / 120, msec += 10) {
             data.push({
                 date: msec,
                 x: Math.cos(t) * 90 + 100,
                 y: Math.sin(t) * 90 + 100
-            })
+            });
         }
 
         const cvs = document.querySelector('canvas');
@@ -125,21 +151,28 @@
             .ticks(100)
             .label('canvas')
             .labelStyle({
-                font: 'Arial', size: 10, color: '#000', offset: 5
+                font: 'Arial',
+                size: 10,
+                color: '#000',
+                offset: 5
             })
             .canvas(cvs)
             .animation(2, 1000, 4000, true);
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+            </div>
 
-            <h3 id="qs-d3js">D3.js</h3>
-            <pre><code>&lt;!DOCTYPE html&gt;
+
+            <div id="tab-d3-js" style="width: 100%;">
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot;
+          content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot;
+          content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
     &lt;script src=&quot;https://d3js.org/d3.v6.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;tra.min.js&quot;&gt;&lt;/script&gt;
     &lt;title&gt;Tra.js - d3 demo&lt;/title&gt;
@@ -149,8 +182,10 @@
     &lt;div id=&quot;d3-view&quot;&gt;&lt;/div&gt;
 
     &lt;script&gt;
-        let data = []
-        for (let t = 0, msec = 1000; t &lt; Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
+        let data = [];
+        for (let t = 0, msec = 1000;
+             t &lt; Math.PI / 2 * 3;
+             t += Math.PI / 120, msec += 10) {
             data.push({
                 date: msec,
                 x: Math.cos(t) * 90 + 100,
@@ -180,6 +215,53 @@
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+            </div>
+
+            <div id="tab-ts">
+                <pre><code class="language-typescript">
+import { Trajs, Trajectory } from 'trajs';
+
+type Data = {
+    date: number;
+    x: number;
+    y: number;
+};
+
+window.onload = () => {
+    let data: Data[] = [];
+    for (let t = 0, msec = 1000; 
+            t &lt; Math.PI / 2 * 3; 
+            t += Math.PI / 120, msec += 10) {
+        data.push({
+            date: msec,
+            x: Math.cos(t) * 90 + 100,
+            y: Math.sin(t) * 90 + 100
+        });
+    }
+
+    const cvs:HTMLCancasElement = 
+    &lt;HTMLCancasElement&gt;document.querySelector('canvas');
+
+    const trajs: Trajectory = Trajs()
+                        .trajectory(data)
+                        .weight(5)
+                        .thinning(0.99)
+                        .length(1000)
+                        .damping(0.95)
+                        .color(3, 152, 252)
+                        .ticks(100)
+                        .label('canvas')
+                        .labelStyle({
+                            font: 'Arial',
+                            size: 10,
+                            color: '#000',
+                            offset: 5
+                        })
+                        .canvas(cvs)
+                        .animation(2, 1000, 4000, true);
+}
+                </code></pre>
+            </div>
         </div>
 
 
@@ -230,7 +312,7 @@
 
             <h4>Format</h4>
             <div>Data format is JSON.</div>
-            <pre><code>[{
+            <pre><code class="language-typescript">[{
     date: 0, lon: 10, lat:10
 }, {
     date: 1000, lon: 100, lat:50
@@ -316,20 +398,22 @@
             <div>
                 <h3 id="ex-cvs">Canvas</h3>
                 <h4>Data</h4>
-                <pre><code>let data = []
-for (let t = 0, msec = 1000; t < Math.PI / 2 * 3; t += Math.PI / 120, msec += 10) {
-    data.push({
-        date: msec,
-        x: Math.cos(t) * 90 + 100,
-        y: Math.sin(t) * 90 + 100
-    })
+                <pre><code class="language-javascript">let data = []
+for (let t = 0, msec = 1000; 
+     t &lt; Math.PI / 2 * 3;
+     t += Math.PI / 120, msec += 10) {
+        data.push({
+            date: msec,
+            x: Math.cos(t) * 90 + 100,
+            y: Math.sin(t) * 90 + 100
+        });
 }
 </code></pre>
 
                 <h4>Static</h4>
                 <canvas id="cvs0" width="200" height="200"></canvas>
-                <script src="./00.js"></script>
-                <pre><code>const cvs = document.querySelector('canvas');
+                <script src="./src/00.js"></script>
+                <pre><code class="language-typescript">const cvs = document.querySelector('canvas');
 Trajs()
     .trajectory(data)
     .weight(5)
@@ -341,8 +425,8 @@ Trajs()
 
                 <h4>Animation</h4>
                 <canvas id="cvs1" width="200" height="200"></canvas>
-                <script src="./01.js"></script>
-                <pre><code>const cvs = document.querySelector('canvas');
+                <script src="./src/01.js"></script>
+                <pre><code class="language-typescript">const cvs = document.querySelector('canvas');
 Trajs()
     .trajectory(data)
     .weight(5)
@@ -359,8 +443,8 @@ Trajs()
                 <canvas id="cvs2" width="200" height="200"></canvas>
                 <button id="start">start</button>
                 <button id="pause">pause</button>
-                <script src="./02.js"></script>
-                <pre><code>const cvs = document.querySelector('canvas');
+                <script src="./src/02.js"></script>
+                <pre><code class="language-typescript">const cvs = document.querySelector('canvas');
 const trajs = Trajs()
     .trajectory(data)
     .weight(10)
@@ -388,8 +472,8 @@ document.querySelector('#pause')
 
                 <h4>Animation (not use transition method.)</h4>
                 <canvas id="cvs3" width="200" height="200"></canvas>
-                <script src="./03.js"></script>
-                <pre><code>const cvs = document.querySelector('canvas');
+                <script src="./src/03.js"></script>
+                <pre><code class="language-typescript">const cvs = document.querySelector('canvas');
 const ctx = cvs.getContext('2d');
 
 const trajs = Trajs()
@@ -412,8 +496,8 @@ setInterval(function () {
 
                 <h4>Map</h4>
                 <canvas id="cvs4" width="200" height="200"></canvas>
-                <script src="./04.js"></script>
-                <pre><code>fetch("JPN.topojson")
+                <script src="./src/04.js"></script>
+                <pre><code class="language-typescript">fetch("JPN.topojson")
     .then(response => response.text())
     .then(topojson => {
         const cvs = document.querySelector('#cvs');
@@ -433,8 +517,8 @@ setInterval(function () {
                 <h3 id="ex-d3js">D3.js</h3>
                 <h4>Static</h4>
                 <div id="d3-view0"></div>
-                <script src="./05.js"></script>
-                <pre><code>const svg = d3.select("#d3-view")
+                <script src="./src/05.js"></script>
+                <pre><code class="language-typescript">const svg = d3.select("#d3-view")
 .append("svg")
 .attr("width", 200)
 .attr("height", 200);
@@ -449,8 +533,8 @@ Trajs()
 
                 <h4>Animation</h4>
                 <div id="d3-view1"></div>
-                <script src="./06.js"></script>
-                <pre><code>const svg = d3.select("#d3-view")
+                <script src="./src/06.js"></script>
+                <pre><code class="language-typescript">const svg = d3.select("#d3-view")
 .append("svg")
 .attr("width", 200)
 .attr("height", 200);

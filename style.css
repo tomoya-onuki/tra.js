@@ -1,6 +1,6 @@
 body {
     background: #222;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -56,26 +56,30 @@ body {
         cursor: pointer;
         z-index: 3;
     }
+
     #contentslist-open:checked~#contentslist-open-button {
         border: none;
     }
-    #contentslist-open:checked~#contentslist-open-button::before, 
-    #contentslist-open:checked~#contentslist-open-button::after{
+
+    #contentslist-open:checked~#contentslist-open-button::before,
+    #contentslist-open:checked~#contentslist-open-button::after {
         content: "";
         display: block;
-        width: 100%;/*バツ線の長さ*/
-        height: 1px;/*バツ線の太さ*/
+        width: 100%;
+        /*バツ線の長さ*/
+        height: 1px;
+        /*バツ線の太さ*/
         background: #222;
         transform: rotate(45deg);
-        transform-origin:0% 50%;
+        transform-origin: 0% 50%;
         position: absolute;
         top: calc(14% - 5px);
         left: 14%;
     }
-    
-    #contentslist-open:checked~#contentslist-open-button::after{
+
+    #contentslist-open:checked~#contentslist-open-button::after {
         transform: rotate(-45deg);
-        transform-origin:100% 50%;
+        transform-origin: 100% 50%;
         left: auto;
         right: 14%;
     }
@@ -104,6 +108,7 @@ body {
         left: calc(50% - 450px);
         color: #fff;
     }
+
     #contentslist-open-button {
         display: none;
     }
@@ -129,8 +134,12 @@ pre {
     color: #fff;
     background: #444;
     border-radius: 10px;
-    margin: 10px 0 50px 0;
+    margin: -10px 0 50px 0;
     white-space: pre-wrap;
+}
+
+code {
+    font-family: 'Source Code Pro', monospace;
 }
 
 h1 {
@@ -209,4 +218,26 @@ a:hover {
     margin: 10px 0 0 0;
     border-collapse: collapse;
     /* セルの線を重ねる */
+}
+
+.code-copy-btn {
+    display: block;
+    position: relative;
+    top: 42px;
+    left: 540px;
+    width: 45px;
+    background-color: rgba(0, 0, 0, 0);
+    border: #eee 1px solid;
+    border-radius: 10px;
+    color: #eee;
+    opacity: 0.5;
+    cursor: pointer;
+}
+.code-copy-btn:hover {
+    opacity: 1.0;
+}
+.code-copy-btn:active {
+    background-color: #eee;
+    border-color: #eee;
+    color: #222;
 }
