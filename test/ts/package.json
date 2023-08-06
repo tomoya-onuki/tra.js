@@ -1,0 +1,25 @@
+{
+  "name": "ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/chroma-js": "^2.4.0",
+    "@types/d3": "^7.4.0",
+    "chroma-js": "^2.4.2",
+    "d3": "^7.8.5",
+    "dayjs": "^1.11.9",
+    "trajs": "github:tomoya-onuki/tra.js",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
