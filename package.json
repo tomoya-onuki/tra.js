@@ -2,14 +2,12 @@
   "name": "trajs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
+  "author": "Tomoya Onuki",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^5.1.6"
-  }
+  },
+  "main": "dist/index.js", 
+  "types": "dist/index.d.ts",
+  "private": true 
 }
