@@ -2,16 +2,35 @@ window.addEventListener('load', () => {
     document.querySelectorAll('pre').forEach(preElem => {
         const codeElem = preElem.querySelector('code');
 
-        const cpBtn = document.createElement('button');
-        cpBtn.textContent = 'copy';
-        cpBtn.classList.add('code-copy-btn');
+        const cpBtnElem = document.createElement('div');
+        cpBtnElem.classList.add('copy-btn-box');
 
-        cpBtn.addEventListener('click', () => {
+        const copiedTextElem = document.createElement('span');
+        copiedTextElem.classList.add('copy-msg');
+        copiedTextElem.textContent = 'copied!';
+
+        const cpLogoElem = document.createElement('span');
+        cpLogoElem.classList.add('copy-btn');
+        cpLogoElem.classList.add('material-symbols-outlined');
+        cpLogoElem.textContent = 'content_copy';
+
+        cpBtnElem.appendChild(copiedTextElem);
+        cpBtnElem.appendChild(cpLogoElem);
+
+        cpBtnElem.addEventListener('click', () => {
+            copiedTextElem.style.display = 'inline-block';
+
+            let ms = 1000;
+            copiedTextElem.style.transition = "opacity " + ms + "ms";
+            setTimeout(() => copiedTextElem.style.opacity = 0, 700);
+            setTimeout(() => {
+                copiedTextElem.style.opacity = 1;
+                copiedTextElem.style.display = "none";
+            }, ms);
+
             navigator.clipboard.writeText(codeElem.textContent);
-            cpBtn.innerHTML = 'ok!';
-            setTimeout(() => (cpBtn.innerHTML = 'copy'), 1000);
         });
 
-        preElem.insertAdjacentElement("beforebegin", cpBtn);
+        preElem.insertAdjacentElement("beforebegin", cpBtnElem);
     });
 });

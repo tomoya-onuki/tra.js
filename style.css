@@ -220,24 +220,24 @@ a:hover {
     /* セルの線を重ねる */
 }
 
-.code-copy-btn {
-    display: block;
-    position: relative;
-    top: 42px;
-    left: 540px;
-    width: 45px;
-    background-color: rgba(0, 0, 0, 0);
-    border: #eee 1px solid;
-    border-radius: 10px;
-    color: #eee;
-    opacity: 0.5;
+
+
+.copy-btn-box {
+    position: absolute;
+    right: 0px;
+    transform: translate(-15px, 0px);
+    /* transform: translate(-15px, -55px); */
     cursor: pointer;
+    color: #eee;
 }
-.code-copy-btn:hover {
-    opacity: 1.0;
+.copy-btn {
+    font-variation-settings:
+        'FILL'0,
+        'wght'300,
+        'GRAD'0,
+        'opsz'24;
+    transform: translate(0, 7px);
 }
-.code-copy-btn:active {
-    background-color: #eee;
-    border-color: #eee;
-    color: #222;
+.copy-msg {
+    display: none;
 }
