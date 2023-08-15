@@ -9,9 +9,9 @@ Tra.jsは時系列位置データをwebブラウザ上で可視化するため�
 https://tomoya-onuki.github.io/tra.js/
 
 ## Data
-I use processed bus location data obtained from GTFS-JP(https://www.gtfs.jp/).
+I use processed bus location data obtained from GTFS-JP([https://www.gtfs.jp/](https://www.gtfs.jp/)).
 
-GTFS-JP(https://www.gtfs.jp/)より得たバスの運行データを加工したものを利用しています。
+GTFS-JP([https://www.gtfs.jp/](https://www.gtfs.jp/))より得たバスの運行データを加工したものを利用しています。
 
 
 ## Quick Start
